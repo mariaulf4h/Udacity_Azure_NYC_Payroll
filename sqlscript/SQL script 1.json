@@ -1,0 +1,17 @@
+{
+	"name": "SQL script 1",
+	"properties": {
+		"content": {
+			"query": "IF NOT EXISTS (SELECT * FROM sys.external_file_formats WHERE name = 'SynapseDelimitedTextFormat') \nCREATE EXTERNAL FILE FORMAT [SynapseDelimitedTextFormat] \nWITH ( FORMAT_TYPE = DELIMITEDTEXT ,\nFORMAT_OPTIONS (\nFIELD_TERMINATOR = ',',\nUSE_TYPE_DEFAULT = FALSE\n))\nGO\n\nIF NOT EXISTS (SELECT * FROM sys.external_data_sources WHERE name = 'adlsnycpayroll-maria-u_nycstoragemar_dfs_core_windows_net') \n  CREATE EXTERNAL DATA SOURCE [adlsnycpayroll-maria-u_nycstoragemar_dfs_core_windows_net] \n  WITH (\n      LOCATION = 'abfss://adlsnycpayroll-maria-u@nycstoragemar.dfs.core.windows.net' \n  )\nGO\n\nCREATE EXTERNAL TABLE [dbo].[NYC_Payroll_Summary](\n[FiscalYear] [VARCHAR] NULL,\n[AgencyName] [varchar] NULL,\n[TotalPaid] [VARCHAR] NULL\n)\nWITH (\nLOCATION = '/dirstaging/',\nDATA_SOURCE = [adlsnycpayroll-maria-u_nycstoragemar_dfs_core_windows_net],\nFILE_FORMAT = [SynapseDelimitedTextFormat]\n)\nGO",
+			"metadata": {
+				"language": "sql"
+			},
+			"currentConnection": {
+				"databaseName": "nyc_payroll",
+				"poolName": "Built-in"
+			},
+			"resultLimit": 5000
+		},
+		"type": "SqlQuery"
+	}
+}
